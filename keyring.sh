@@ -20,7 +20,7 @@ install() {
     esac
     
     install-bashrc
-    add-key ~/.ssh/id_rsa
+    add-key ~/.ssh/id_ed25519
     PS1='$ ' source ~/.profile
 }
 
@@ -67,7 +67,7 @@ install-bashrc() {
     
     CODE="if [ -e $SCRIPT ]; then
     eval \$($SCRIPT start $EMAIL) &> /dev/null
-    $SCRIPT ssh-add ~/.ssh/id_rsa
+    $SCRIPT ssh-add ~/.ssh/id_ed25519
     alias ssh-add=\"$SCRIPT ssh-add\"
 fi"
 
@@ -111,7 +111,7 @@ start() {
 ssh-add() {
     login
     
-    local KEY=${1:-~/.ssh/id_rsa}
+    local KEY=${1:-~/.ssh/id_ed25519}
     local NAME
     
     NAME="ssh/$(hostname)-$(basename $KEY)"
@@ -128,7 +128,7 @@ ssh-add() {
     export DISPLAY=dummydisplay:0
 
     if [ -x /usr/bin/setsid ]; then
-        timeout 1 setsid /usr/bin/ssh-add $KEY </dev/null &>/dev/null || echo '$SCRIPT failed to unlock key ~/.ssh/id_rsa (perhaps your passphrase has changed?)'
+        timeout 1 setsid /usr/bin/ssh-add $KEY </dev/null &>/dev/null || echo '$SCRIPT failed to unlock key ~/.ssh/id_ed25519 (perhaps your passphrase has changed?)'
     else
         /usr/bin/ssh-add $KEY < /dev/null
     fi
